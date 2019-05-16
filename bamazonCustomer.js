@@ -19,36 +19,42 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
     if (err) throw err;
-    buyStuff();
+    store();
 });
 
-const buyStuff = () => {
-    console.log("--------Welcome! Buy everything you need from Bamazon!--------".red);
+const store = () => {
+    console.log(
+`---------------------------------------------------        
+                    Welcome
+---------------------------------------------------
+      Buy everything you need from Bamazon
+---------------------------------------------------
+        `.red);
+    whatToBuy();
     whatsForSale();
-    // itemIdQuant();
+
 };
 
 const whatsForSale = () => connection.query("select * from bamazon1", (err, res) => {
     if (err) throw err;
-    const bamazonArray = [];
+    const bamazonArray = [
+        ["Product ID", "Product", "Price"]
+    ];
     //will make array that is filled wtih bamazon table values
     for (var i = 0; i < res.length; i++) {
         bamazonArray.push(bamazonObjToArray(res[i]));
     }
     //write table to console
     const output = table.table(bamazonArray);
-    console.log("   ID   ||   Product   ||  Price")
-    console.log(output.gray);
+    console.log(output.grey);
 
     // for (var i = 0; i < res.length; i++) {
     //     console.log(`item_id: ${res[i].item_id}, product_name: ${res[i].product_name}, department_name: ${res[i].department_name}, price: ${res[i].price}, stock_quantity ${res[i].stock_quantity}`)
     // }
 });
 
-
-
 //fuction to get values and put in an array to display in table, and tanle shoudl be dynamic
-const bamazonObjToArray = (obj) => {
+const bamazonObjToArray = obj => {
     const objArray = [];
     objArray.push(obj.item_id);
     objArray.push(obj.product_name);
@@ -58,30 +64,42 @@ const bamazonObjToArray = (obj) => {
     return objArray;
 };
 
-//prompt for 1) what do they 
-var whatWant = () => {
-    prompt([{
+//prompts for customer
+const whatToBuy = () => inquirer.prompt([{
         type: "list",
-        name: "choices",
+        name: "item",
         message: "What do you want to buy?",
-        choices: ["12345", "23456", "34567"],
-    }]).then(answer => {
-        // console.log(answer.choices);
+        choices: ["12345", "23456", "34567", "45678", "56789", "67890", "78901", "89012", "90123", "1234"],
+    },
+    {
+        type: "input",
+        name: "quantity",
+        message: "How many would you like?",
+        validate: val => {
+            return !!(isNaN(val) === false);
+        }
+    }
+]).then(answer => {
+    let whatItem = answer.item;
+    let howMany = answer.quantity;
+    order(whatItem, howMany);
+});
 
-        // switchCases(answer.choices);
-        // appendFile("log.txt", answer.choices, function(err) {
-        //     if (err) {
-        //         console.log(err)
-            // }
-        })
-    // });
+//deal wtih the order
+const order = (whatItem, howMany) => {
+    //connect to mysql and do stuff with table
+    connection.query(`Select * FROM bamazon1 WHERE item_id = ${whatItem}`, function (err, res) {
+        if (err) throw (err);
+        //if more than stock, can not get
+        if (howMany > res[0].stock_quantity) {
+            console.log(`Oh no! We don't have that many ${res[0].product_name}. We only have ${res[0].stock_quantity} in stock.`);
+            //if less than stock, give price and say congrats
+        } else if (howMany <= res[0].stock_quantity) {
+            console.log(`Awesome! Your ${res[0].product_name} is available!`);
+            const yourPrice = res[0].price * howMany;
+            console.log(`The total is ${yourPrice}.`);
+            //update my table
+            connection.query(`UPDATE bamazon1 SET stock_quantity = stock_quantity - ${howMany} WHERE item_id = ${whatItem}`)
+        }
+    });
 };
-
-
-//2) how many
-
-//subtract from inventory
-
-//if none in inventory let them know
-
-//some in inventory tell them congrats!
