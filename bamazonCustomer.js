@@ -30,8 +30,10 @@ const store = () => {
       Buy everything you need from Bamazon
 ---------------------------------------------------
         `.red);
-    whatToBuy();
-    whatsForSale();
+        whatsForSale();
+        whatToBuy();
+    // console.log(output);
+    
 
 };
 
@@ -46,11 +48,7 @@ const whatsForSale = () => connection.query("select * from bamazon1", (err, res)
     }
     //write table to console
     const output = table.table(bamazonArray);
-    console.log(output.grey);
-
-    // for (var i = 0; i < res.length; i++) {
-    //     console.log(`item_id: ${res[i].item_id}, product_name: ${res[i].product_name}, department_name: ${res[i].department_name}, price: ${res[i].price}, stock_quantity ${res[i].stock_quantity}`)
-    // }
+    console.log('\n----------------------------------------\n  check out the awesome things we have \n' + output.grey + '\n----------------------------------------\n');
 });
 
 //fuction to get values and put in an array to display in table, and tanle shoudl be dynamic
@@ -80,8 +78,8 @@ const whatToBuy = () => inquirer.prompt([{
         }
     }
 ]).then(answer => {
-    let whatItem = answer.item;
-    let howMany = answer.quantity;
+    const whatItem = answer.item;
+    const howMany = answer.quantity;
     order(whatItem, howMany);
 });
 
