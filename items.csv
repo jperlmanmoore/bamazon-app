@@ -1,10 +1,10 @@
-12345, pants, clothes, $25, 150
-23456, mug, kitchen, $10, 1000
-34567, chair, furniture, $299, 40
-45678, lamp, furniture_accessory, $79, 50
-56789, orange cat, animals, $1, 1
-67890, calico cat, animals, $1, 1
-78901, toothbrush, personal, $3, 600
-89012, car, autos, $50000, 3
-90123, white wine, drinks, $39, 80
-01234, light fixture, building, $250, 400
+12345, pants, clothes, 25, 150
+23456, mug, kitchen, 10, 1000
+34567, chair, furniture, 299, 40
+45678, lamp, furniture_accessory, 79, 50
+56789, orange cat, animals, 1, 1
+67890, calico cat, animals, 1, 1
+78901, toothbrush, personal, 3, 600
+89012, car, autos, 50000, 3
+90123, white wine, drinks, 39, 80
+01234, light fixture, building, 250, 400

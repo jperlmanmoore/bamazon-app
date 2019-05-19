@@ -30,8 +30,8 @@ const store = () => {
       Buy everything you need from Bamazon
 ---------------------------------------------------
         `.red);
-        whatsForSale();
-        whatToBuy();
+        whatsForSale(); 
+        whatToBuy(); //need to tell to not ask question until done drawing table
     // console.log(output);
     
 
@@ -94,8 +94,9 @@ const order = (whatItem, howMany) => {
             //if less than stock, give price and say congrats
         } else if (howMany <= res[0].stock_quantity) {
             console.log(`Awesome! Your ${res[0].product_name} is available!`);
+            // console.log(res[0].price);
             const yourPrice = res[0].price * howMany;
-            console.log(`The total is ${yourPrice}.`);
+            console.log(`The total is $${yourPrice}.`);
             //update my table
             connection.query(`UPDATE bamazon1 SET stock_quantity = stock_quantity - ${howMany} WHERE item_id = ${whatItem}`)
         }
