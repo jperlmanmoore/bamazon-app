@@ -24,17 +24,14 @@ connection.connect(err => {
 
 const store = () => {
     console.log(
-`---------------------------------------------------        
+        `---------------------------------------------------        
                     Welcome
 ---------------------------------------------------
       Buy everything you need from Bamazon
 ---------------------------------------------------
         `.red);
-        whatsForSale(); 
-        whatToBuy(); //need to tell to not ask question until done drawing table
-    // console.log(output);
-    
-
+    whatsForSale();
+    whatToBuy(); //need to tell to not ask question until done drawing table
 };
 
 const whatsForSale = () => connection.query("select * from bamazon1", (err, res) => {
@@ -96,9 +93,22 @@ const order = (whatItem, howMany) => {
             console.log(`Awesome! Your ${res[0].product_name} is available!`);
             // console.log(res[0].price);
             const yourPrice = res[0].price * howMany;
-            console.log(`The total is $${yourPrice}.`);
+            console.log(`The total is $${yourPrice}. Thanks for shopping!`);
             //update my table
             connection.query(`UPDATE bamazon1 SET stock_quantity = stock_quantity - ${howMany} WHERE item_id = ${whatItem}`)
-        }
+        };
+        moreShop();
     });
 };
+
+const moreShop = () => inquirer.prompt([{
+    type: "confirm",
+    name: "moreStuff",
+    message: "Would you like to buy something else?",
+}]).then(answer => {
+    if (answer.moreStuff === true) {
+        store();
+    } else {
+        console.log("Have nice day!")
+    }
+});
